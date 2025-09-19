@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from wikisource.text_operations.text_splitter_txt.kagyur_splitter import (
+from src.wikisource.text_operations.text_splitter_txt.kagyur_splitter import (
     LineByLineProcessor,
 )
 
