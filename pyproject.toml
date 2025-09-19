@@ -17,6 +17,21 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+dependencies = [
+    "pyvis >= 0.3.2",
+    "networkx",
+    "requests>=2.32.3",
+    "pywikibot>=10.1.0",
+    "pandas>=2.2.0",
+    "mwparserfromhell>=0.6.6",
+    "google-api-core>=2.11.0",
+    "google-api-python-client>=2.172.0",
+    "google-auth>=2.40.3",
+    "google-auth-httplib2>=0.2.0",
+    "google-auth-oauthlib>=1.2.2",
+    "googleapis-common-protos>=1.70.0"
+]
+
 [project.optional-dependencies]
 dev = [
     "pytest",

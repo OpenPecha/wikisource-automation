@@ -127,3 +127,15 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# credentials
+user-config.py
+user-password.py
+oauth-credentials.json
+service-account-credentials.json
+
+# cache and data directories
+cache/
+data/
+upload_log.csv
+data_text_operations/
