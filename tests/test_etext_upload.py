@@ -38,13 +38,10 @@ class TestETextUpload(unittest.TestCase):
             result["2"], "This is  text for page two.\nMore text  for page two."
         )
 
-    @patch("wikisource.etext_upload.os.path.exists")
     @patch("wikisource.etext_upload.json.load")
     @patch("wikisource.etext_upload.open")
-    @patch("pywikibot.proofreadpage.ProofreadPage")
-    def test_get_page_titles_from_cache(
-        self, mock_proofreadpage, mock_open, mock_json_load, mock_exists
-    ):
+    @patch("pathlib.Path.exists")
+    def test_get_page_titles_from_cache(self, mock_exists, mock_open, mock_json_load):
         """Test loading page titles from cache"""
         # Mock cache file exists
         mock_exists.return_value = True
@@ -55,14 +52,22 @@ class TestETextUpload(unittest.TestCase):
         # Mock the site object
         mock_site = MagicMock()
 
-        # Call the function
-        result = get_page_titles("Index:Test", mock_site)
+        # Mock ProofreadPage class inside the function
+        with patch("pywikibot.proofreadpage.ProofreadPage") as mock_proofreadpage:
+            mock_page1 = MagicMock()
+            mock_page2 = MagicMock()
+            mock_proofreadpage.side_effect = [mock_page1, mock_page2]
 
-        # Verify we got the expected result
-        self.assertEqual(len(result), 2)
-        # Verify ProofreadPage was called with the right arguments
-        mock_proofreadpage.assert_any_call(mock_site, "Page:Test/1")
-        mock_proofreadpage.assert_any_call(mock_site, "Page:Test/2")
+            # Call the function
+            result = get_page_titles("Index:Test", mock_site)
+
+            # Verify we got the expected result
+            self.assertEqual(len(result), 2)
+            self.assertEqual(result["1"], mock_page1)
+            self.assertEqual(result["2"], mock_page2)
+            # Verify ProofreadPage was called with the right arguments
+            mock_proofreadpage.assert_any_call(mock_site, "Page:Test/1")
+            mock_proofreadpage.assert_any_call(mock_site, "Page:Test/2")
 
     @patch("wikisource.etext_upload.csv.writer")
     @patch("wikisource.etext_upload.os.path.isfile")
